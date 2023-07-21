@@ -65,6 +65,15 @@ export function App() {
               return
             }
 
+            // Bug 3
+            // Simple fix: since the Select Input considers "All Employees" as a First
+            // and Last Name Employee, a simple fix would be redirecting the call to the
+            // loadAllTransactions function, bypassing the need for an Employee ID.
+            if (newValue.firstName === "All" && newValue.lastName === "Employees") {
+              await loadAllTransactions()
+              return
+            }
+
             await loadTransactionsByEmployee(newValue.id)
           }}
         />
