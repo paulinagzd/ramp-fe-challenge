@@ -51,7 +51,11 @@ export function App() {
         <hr className="RampBreak--l" />
 
         <InputSelect<Employee>
-          isLoading={isLoading}
+          // Bug 5
+          // Simple fix: set isLoading only when there are no fetched employees.
+          // A more detailed or cleaner solution could be creating a new or HOC
+          // of loading, setIsLoading states.
+          isLoading={employees === null}
           defaultValue={EMPTY_EMPLOYEE}
           items={employees === null ? [] : [EMPTY_EMPLOYEE, ...employees]}
           label="Filter by employee"
@@ -66,10 +70,9 @@ export function App() {
             }
 
             // Bug 3
-            // Simple fix: since the Select Input considers "All Employees" as a First
-            // and Last Name Employee, a simple fix would be redirecting the call to the
-            // loadAllTransactions function, bypassing the need for an Employee ID.
-            if (newValue.firstName === "All" && newValue.lastName === "Employees") {
+            // Simple fix: Redirecting the call to the loadAllTransactions function
+            // when EMPTY_EMPLOYEE option is selected, bypassing the need for an Employee ID.
+            if (newValue === EMPTY_EMPLOYEE) {
               await loadAllTransactions()
               return
             }
