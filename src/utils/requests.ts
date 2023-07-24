@@ -8,8 +8,6 @@ import {
 } from "./types"
 import mockData from "../mock-data.json"
 
-const TRANSACTIONS_PER_PAGE = 5
-
 const data: { employees: Employee[]; transactions: Transaction[] } = {
   employees: mockData.employees,
   transactions: mockData.transactions,
@@ -24,8 +22,14 @@ export const getTransactionsPaginated = ({
     throw new Error("Page cannot be null")
   }
 
-  const start = page * TRANSACTIONS_PER_PAGE
-  const end = start + TRANSACTIONS_PER_PAGE
+  // Bug 4
+  // Simple fix: making TRANSACTIONS_PER_PAGE into a variable inside the util,
+  // modifying it each time the View More button is clicked. This allows
+  // pagination to still be set but showing past page and new page in the same view.
+  const transactionsPerPage = (page + 1) * 5
+
+  const start = 1
+  const end = start + transactionsPerPage
 
   if (start > data.transactions.length) {
     throw new Error(`Invalid page ${page}`)
