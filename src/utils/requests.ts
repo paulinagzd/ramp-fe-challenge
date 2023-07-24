@@ -24,22 +24,21 @@ export const getTransactionsPaginated = ({
 
   // Bug 4
   // Simple fix: making TRANSACTIONS_PER_PAGE into a variable inside the util,
-  // modifying it each time the View More button is clicked. This allows
+  // defining an upper limit when the View More button is clicked. This allows
   // pagination to still be set but showing past page and new page in the same view.
   const transactionsPerPage = (page + 1) * 5
+  const end = Math.min(transactionsPerPage, data.transactions.length)
 
-  const start = 1
-  const end = start + transactionsPerPage
-
-  if (start > data.transactions.length) {
+  // placeholder conditional (not deleted for explanation), not reached with Bug 6 fix
+  if (end > data.transactions.length) {
     throw new Error(`Invalid page ${page}`)
   }
-
+ 
   const nextPage = end < data.transactions.length ? page + 1 : null
 
   return {
     nextPage,
-    data: data.transactions.slice(start, end),
+    data: data.transactions.slice(0, end),  // request results always starting at 0
   }
 }
 
